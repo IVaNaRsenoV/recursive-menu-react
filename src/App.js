@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Menu } from "antd";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const { SubMenu, Item } = Menu;
 
-export default App;
+const data = [
+  { fileName: "test1" },
+  {
+    fileName: "test2",
+    items: [
+      {
+        fileName: "x",
+      },
+    ],
+  },
+  {
+    fileName: "x",
+    items: [
+      {
+        fileName: "test3",
+        items: [{ fileName: "test4" }],
+      },
+      { fileName: "test5" },
+    ],
+  },
+];
+
+const recursiveMenu = (data) => {
+  return data.map(({ fileName, items = [] }) => {
+    console.log({ fileName, items });
+    if (!items?.length) {
+      return <Item key={Math.random()}>{fileName}</Item>;
+    }
+
+    return (
+      <SubMenu key={Math.random()} title={fileName}>
+        {recursiveMenu(items)}
+      </SubMenu>
+    );
+  });
+};
+
+export const App = () => {
+  return <Menu mode="inline">{recursiveMenu(data)}</Menu>;
+};
